@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CompanyData.Models
+namespace PanamaPrintApp.Models
 {
     public class UserContext : IdentityDbContext
     {

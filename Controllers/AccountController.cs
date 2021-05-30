@@ -1,10 +1,10 @@
-﻿using CompanyData.Models;
+﻿using PanamaPrintApp.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CompanyData.Controllers
+namespace PanamaPrintApp.Controllers
 {
     public class AccountController : Controller
     {

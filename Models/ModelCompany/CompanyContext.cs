@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace CompanyData.Models
+namespace PanamaPrintApp.Models
 {
     public class CompanyContext : DbContext 
     {

@@ -1,11 +1,11 @@
-﻿using CompanyData.Models;
+﻿using PanamaPrintApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CompanyData.Controllers
+namespace PanamaPrintApp.Controllers
 {
     [Authorize(Roles = "Администратор")]
     public class AdministrationController : Controller

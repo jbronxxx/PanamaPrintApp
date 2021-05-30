@@ -1,14 +1,16 @@
-﻿@model IEnumerable<CompanyData.Models.Company>
+﻿@model IEnumerable<PanamaPrintApp.Models.Company>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<header>
+    <p align="right">
+        <a asp-action="index" asp-controller="Order" class="btn btn-dark">Журнал выполненных работ</a>
+        <a asp-action="Create" class="btn btn-dark">Добавить компанию</a>
+    </p>
+</header>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -37,9 +39,14 @@
                 @Html.DisplayFor(modelItem => item.Adress)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CompanyId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CompanyId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CompanyId">Delete</a>
+                <p align="right">
+                    <a asp-action="Create" asp-controller="Order" asp-route-id="@item.CompanyId" class="btn btn-dark">Записать работу в журнал</a>
+                    <a asp-action="CompanyOrder" asp-controller="Order" asp-route-id="@item.CompanyId" class="btn btn-dark">Журнал выполненных работ</a>
+                </p>
+                <p align="right">
+                    <a asp-action="Edit" asp-route-id="@item.CompanyId" class="btn btn-primary">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@item.CompanyId" class="btn btn-danger">Удалить</a>
+                </p>
             </td>
         </tr>
 }

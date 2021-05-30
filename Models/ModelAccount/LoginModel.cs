@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CompanyData.Models
+namespace PanamaPrintApp.Models
 {
     public class LoginModel
     {

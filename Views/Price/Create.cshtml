@@ -1,11 +1,12 @@
-﻿@model PanamaPrintApp.Models.Company
+﻿@model PanamaPrintApp.Models.Price
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h4>Добавить компанию</h4>
+<h1>Create</h1>
 
+<h4>Price</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,24 +18,19 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="INN" class="control-label"></label>
-                <input asp-for="INN" class="form-control" />
-                <span asp-validation-for="INN" class="text-danger"></span>
+                <label asp-for="ServicePrice" class="control-label"></label>
+                <input asp-for="ServicePrice" class="form-control" />
+                <span asp-validation-for="ServicePrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Adress" class="control-label"></label>
-                <input asp-for="Adress" class="form-control" />
-                <span asp-validation-for="Adress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Создать" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-dark">Вернуться</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

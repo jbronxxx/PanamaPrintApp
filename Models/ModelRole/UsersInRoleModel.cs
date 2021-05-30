@@ -1,4 +1,4 @@
-﻿namespace CompanyData.Models
+﻿namespace PanamaPrintApp.Models
 {
     public class UsersInRoleModel
     {

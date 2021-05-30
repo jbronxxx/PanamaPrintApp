@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CompanyData.Models;
+using PanamaPrintApp.Models;
 
 namespace PanamaPrintApp.Controllers
 {
@@ -15,7 +15,7 @@ namespace PanamaPrintApp.Controllers
             _context = context;
         }
 
-        // GET: Order
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Orders.ToListAsync());
@@ -129,6 +129,7 @@ namespace PanamaPrintApp.Controllers
 
         private bool OrderExists(int id) { return _context.Orders.Any(e => e.OrderId == id); }
 
+
         /// <summary>
         /// 
         /// </summary>
@@ -137,17 +138,18 @@ namespace PanamaPrintApp.Controllers
         [HttpGet]
         public async Task<IActionResult> CompanyOrder(int? id)
         {
+            
             if (id == 0)
                 return NotFound();
 
             var companyId = await _context.Companies.FindAsync(id);
 
+            ViewBag.CompanyName = companyId.Name; // Отображает имя компании на странице
+
             if (companyId == null)
                 return NotFound();
 
-            var companyOrder = await _context.Orders.Where(o => o.Companies.Contains(companyId)).ToListAsync();
-
-            return View(companyOrder);
+            return View(await _context.Orders.Where(o => o.Companies.Contains(companyId)).ToListAsync());
         }
     }
 }

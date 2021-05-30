@@ -1,0 +1,60 @@
+﻿
+@model IEnumerable<PanamaPrintApp.Models.Order>
+
+@{
+    ViewData["Title"] = "CompanyOrder";
+}
+
+@*TODO:
+
+    Убрать возможность удаления записей в релизе*@
+<header>
+    <p>
+        <h4>@ViewBag.CompanyName</h4>
+    </p>
+</header>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Consumables)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumables)
+                </td>
+                <td>
+                    <p align="right">
+                        <a asp-action="Edit" asp-route-id="@item.OrderId" class="btn btn-primary">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@item.OrderId" class="btn btn-danger">Удалить</a>
+                    </p>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

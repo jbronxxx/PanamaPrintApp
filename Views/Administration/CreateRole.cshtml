@@ -1,0 +1,24 @@
+﻿@model PanamaPrintApp.Models.CreateRoleModel
+
+@{
+    ViewData["Title"] = "Create Role";
+}
+
+<h2>Создание учётной записии</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RoleName">Введите Имя Учетной Записи</label><br />
+                <input asp-for="RoleName" class="form-control" />
+                <span asp-validation-for="RoleName" class="text-danger" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Создать</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -6,11 +6,11 @@ using PanamaPrintApp.Models;
 
 namespace PanamaPrintApp.Controllers
 {
-    public class CompanyController : Controller
+    public class PriceController : Controller
     {
         private readonly CompanyContext _context;
 
-        public CompanyController(CompanyContext context)
+        public PriceController(CompanyContext context)
         {
             _context = context;
         }
@@ -18,7 +18,7 @@ namespace PanamaPrintApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Companies.ToListAsync());
+            return View(await _context.Prices.ToListAsync());
         }
 
         [HttpGet]
@@ -27,63 +27,59 @@ namespace PanamaPrintApp.Controllers
             return View();
         }
 
-        // TODO: Для Администратора
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompanyId,Name,INN,Adress")] Company company)
+        public async Task<IActionResult> Create([Bind("ServiceId,Name,ServicePrice")] Price price)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(company);
+                _context.Add(price);
 
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(company);
+            return View(price);
         }
 
-        // TODO: Для Администратора
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var company = await _context.Companies.FindAsync(id);
+            var price = await _context.Prices.FindAsync(id);
 
-            if (company == null)
+            if (price == null)
                 return NotFound();
 
-            return View(company);
+            return View(price);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CompanyId,Name,INN,Adress")] Company company)
+        public async Task<IActionResult> Edit(int id, [Bind("ServiceId,Name,ServicePrice")] Price price)
         {
-            if (id != company.CompanyId)
+            if (id != price.ServiceId)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(company);
-
+                    _context.Update(price);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CompanyExists(company.CompanyId))
+                    if (!PriceExists(price.ServiceId))
                         return NotFound();
-                    
                     else
                         throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(company);
+            return View(price);
         }
 
         // TODO: Для Администратора
@@ -93,31 +89,31 @@ namespace PanamaPrintApp.Controllers
             if (id == null)
                 return NotFound();
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.CompanyId == id);
+            var price = await _context.Prices
+                .FirstOrDefaultAsync(m => m.ServiceId == id);
 
-            if (company == null)
+            if (price == null)
                 return NotFound();
 
-            return View(company);
+            return View(price);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
+            var price = await _context.Prices.FindAsync(id);
 
-            _context.Companies.Remove(company);
+            _context.Prices.Remove(price);
 
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CompanyExists(int id)
+        private bool PriceExists(int id)
         {
-            return _context.Companies.Any(e => e.CompanyId == id);
+            return _context.Prices.Any(e => e.ServiceId == id);
         }
     }
 }

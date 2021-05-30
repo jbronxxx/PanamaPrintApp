@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+
+@{
+    ViewBag.Title = "All Roles";
+}
+
+<h1>Список учетных записей</h1>
+
+@if (Model.Any())
+{
+    <div class="form-group">
+        <a class="btn btn-primary" style="width:auto"
+           asp-controller="Administration" asp-action="CreateRole">Добавить</a>
+    </div>
+
+    foreach (var role in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                ID Учетной Записи : @role.Id
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title">@role.Name</h5>
+            </div>
+
+            <div class="card-footer">
+                <a class="btn btn-primary" asp-action="EditRole" asp-controller="Administration" asp-route-id="@role.Id">Редактировать</a>
+                <a class="btn btn-primary" asp-action="DeleteRole" asp-controller="Administration" asp-route-id="@role.Id">Удалить</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="form-group">
+        <a class="btn btn-primary" style="width:auto"
+           asp-controller="Administration" asp-action="CreateRole">Создать</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Нет учетных записей
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Нажмите кнопку "Создать" для добавления учетной записи
+            </h5>
+        </div>
+    </div>
+}
