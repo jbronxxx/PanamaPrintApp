@@ -1,11 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PanamaPrintApp.Models;
 
 namespace PanamaPrintApp.Controllers
 {
+    [Authorize]
     public class CompanyController : Controller
     {
         private readonly CompanyContext _context;
@@ -22,6 +24,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public IActionResult Create()
         {
             return View();
@@ -29,6 +32,7 @@ namespace PanamaPrintApp.Controllers
 
         // TODO: Для Администратора
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CompanyId,Name,INN,Adress")] Company company)
         {
@@ -45,6 +49,7 @@ namespace PanamaPrintApp.Controllers
 
         // TODO: Для Администратора
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -59,6 +64,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CompanyId,Name,INN,Adress")] Company company)
         {
@@ -88,6 +94,7 @@ namespace PanamaPrintApp.Controllers
 
         // TODO: Для Администратора
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -103,6 +110,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -115,6 +123,7 @@ namespace PanamaPrintApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Администратор")]
         private bool CompanyExists(int id)
         {
             return _context.Companies.Any(e => e.CompanyId == id);

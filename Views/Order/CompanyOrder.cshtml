@@ -5,9 +5,7 @@
     ViewData["Title"] = "CompanyOrder";
 }
 
-@*TODO:
 
-    Убрать возможность удаления записей в релизе*@
 <header>
     <p>
         <h4>@ViewBag.CompanyName</h4>
@@ -49,10 +47,13 @@
                     @Html.DisplayFor(modelItem => item.Consumables)
                 </td>
                 <td>
-                    <p align="right">
-                        <a asp-action="Edit" asp-route-id="@item.OrderId" class="btn btn-primary">Редактировать</a>
-                        <a asp-action="Delete" asp-route-id="@item.OrderId" class="btn btn-danger">Удалить</a>
-                    </p>
+                    @if (User.IsInRole("Администратор"))
+                    {
+                        <p align="right">
+                            <a asp-action="Edit" asp-route-id="@item.OrderId" class="btn btn-primary">Редактировать</a>
+                            <a asp-action="Delete" asp-route-id="@item.OrderId" class="btn btn-danger">Удалить</a>
+                        </p>
+                    }
                 </td>
             </tr>
         }

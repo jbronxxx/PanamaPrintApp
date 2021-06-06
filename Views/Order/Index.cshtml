@@ -40,8 +40,12 @@
                 @Html.DisplayFor(modelItem => item.Consumables)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderId" class="btn btn-primary">Редактировать</a>
-                <a asp-action="Delete" asp-route-id="@item.OrderId" class="btn btn-danger">Удалить</a>
+                @if (User.IsInRole("Администратор"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.OrderId" class="btn btn-primary">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@item.OrderId" class="btn btn-danger">Удалить</a>
+                }
+
             </td>
         </tr>
 }

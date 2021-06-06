@@ -1,11 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PanamaPrintApp.Models;
 
 namespace PanamaPrintApp.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly CompanyContext _context;
@@ -59,6 +61,7 @@ namespace PanamaPrintApp.Controllers
 
         // TODO: Изменить метод так, чтобы редактировать мог только Администратор!!!
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,6 +76,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderId,Date,EquipmentName,OrderName,Consumables")] Order order)
         {
@@ -100,6 +104,7 @@ namespace PanamaPrintApp.Controllers
 
         // TODO: Модифицировать метод так, чтобы при удалении сущности компании, удалялись и ее записи работ!!!
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -114,6 +119,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -127,6 +133,7 @@ namespace PanamaPrintApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Администратор")]
         private bool OrderExists(int id) { return _context.Orders.Any(e => e.OrderId == id); }
 
 

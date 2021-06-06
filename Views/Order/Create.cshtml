@@ -26,11 +26,14 @@
                 <input asp-for="OrderName" class="form-control" />
                 <span asp-validation-for="OrderName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Consumables" class="control-label"></label>
-                <input asp-for="Consumables" class="form-control" />
-                <span asp-validation-for="Consumables" class="text-danger"></span>
-            </div>
+            @if (User.IsInRole("Администратор"))
+            {
+                <div class="form-group">
+                    <label asp-for="Consumables" class="control-label"></label>
+                    <input asp-for="Consumables" class="form-control" />
+                    <span asp-validation-for="Consumables" class="text-danger"></span>
+                </div>
+            }
             <div class="form-group">
                 <input type="submit" value="Записать" class="btn btn-primary" />
             </div>

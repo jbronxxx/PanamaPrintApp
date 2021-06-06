@@ -5,10 +5,15 @@
 }
 
 <header>
+    @if (User.IsInRole("Администратор"))
+    {
+        <p align="right">
+            <a asp-action="Create" class="btn btn-dark">Добавить компанию</a>
+        </p>
+    }
     <p align="right">
-        <a asp-action="index" asp-controller="Order" class="btn btn-dark">Журнал выполненных работ</a>
-        <a asp-action="Create" class="btn btn-dark">Добавить компанию</a>
-    </p>
+        <a asp-action="index" asp-controller="Order" class="btn btn-dark">Журнал всех выполненных работ</a>
+    </p>   
 </header>
 
 <table class="table">
@@ -43,10 +48,14 @@
                     <a asp-action="Create" asp-controller="Order" asp-route-id="@item.CompanyId" class="btn btn-dark">Записать работу в журнал</a>
                     <a asp-action="CompanyOrder" asp-controller="Order" asp-route-id="@item.CompanyId" class="btn btn-dark">Журнал выполненных работ</a>
                 </p>
-                <p align="right">
-                    <a asp-action="Edit" asp-route-id="@item.CompanyId" class="btn btn-primary">Редактировать</a>
-                    <a asp-action="Delete" asp-route-id="@item.CompanyId" class="btn btn-danger">Удалить</a>
-                </p>
+
+                @if (User.IsInRole("Администратор"))
+                {
+                    <p align="right">
+                        <a asp-action="Edit" asp-route-id="@item.CompanyId" class="btn btn-primary">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@item.CompanyId" class="btn btn-danger">Удалить</a>
+                    </p>
+                }
             </td>
         </tr>
 }

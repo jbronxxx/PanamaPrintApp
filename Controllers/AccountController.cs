@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PanamaPrintApp.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -18,12 +19,14 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
@@ -49,6 +52,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
