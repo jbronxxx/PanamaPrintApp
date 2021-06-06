@@ -70,6 +70,7 @@ namespace PanamaPrintApp.Controllers
                 {
                     return RedirectToAction("Index", "Company");
                 }
+
                 ModelState.AddModelError("", "Некорректный логин и(или) пароль");
             }
             return View(model);

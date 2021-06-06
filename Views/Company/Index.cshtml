@@ -5,15 +5,13 @@
 }
 
 <header>
-    @if (User.IsInRole("Администратор"))
-    {
-        <p align="right">
-            <a asp-action="Create" class="btn btn-dark">Добавить компанию</a>
-        </p>
-    }
     <p align="right">
+        @if (User.IsInRole("Администратор"))
+        {
+            <a asp-action="Create" class="btn btn-dark">Добавить компанию</a>
+        }
         <a asp-action="index" asp-controller="Order" class="btn btn-dark">Журнал всех выполненных работ</a>
-    </p>   
+    </p> 
 </header>
 
 <table class="table">
@@ -52,8 +50,8 @@
                 @if (User.IsInRole("Администратор"))
                 {
                     <p align="right">
-                        <a asp-action="Edit" asp-route-id="@item.CompanyId" class="btn btn-primary">Редактировать</a>
-                        <a asp-action="Delete" asp-route-id="@item.CompanyId" class="btn btn-danger">Удалить</a>
+                        <a asp-action="Edit" asp-route-id="@item.CompanyId" class="btn btn-primary" style="width:auto">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@item.CompanyId" class="btn btn-danger" style="width:auto">Удалить</a>
                     </p>
                 }
             </td>
