@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PanamaPrintApp.Models;
@@ -22,12 +23,14 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ServiceId,Name,ServicePrice")] Price price)
         {
@@ -43,6 +46,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -57,6 +61,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ServiceId,Name,ServicePrice")] Price price)
         {
@@ -82,8 +87,8 @@ namespace PanamaPrintApp.Controllers
             return View(price);
         }
 
-        // TODO: Для Администратора
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -99,6 +104,7 @@ namespace PanamaPrintApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
