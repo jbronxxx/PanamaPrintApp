@@ -12,6 +12,9 @@ namespace PanamaPrintApp.Models
         [DisplayName("Наименование")]
         public string Name { get; set; }
 
+        [DisplayName("Модель")]
+        public string Model { get; set; }
+
         [DisplayName("Цена")]
         public string ServicePrice { get; set; }
     }

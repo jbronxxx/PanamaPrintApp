@@ -7,6 +7,7 @@ using PanamaPrintApp.Models;
 
 namespace PanamaPrintApp.Controllers
 {
+    [Authorize(Roles = "Администратор")]
     public class PriceController : Controller
     {
         private readonly CompanyContext _context;
@@ -16,57 +17,52 @@ namespace PanamaPrintApp.Controllers
             _context = context;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Prices.ToListAsync());
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Администратор")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ServiceId,Name,ServicePrice")] Price price)
+        public async Task<IActionResult> Create([Bind("ServiceId,Name,Model,ServicePrice")] Price price)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(price);
-
                 await _context.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
             return View(price);
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
+            {
                 return NotFound();
+            }
 
             var price = await _context.Prices.FindAsync(id);
-
             if (price == null)
+            {
                 return NotFound();
-
+            }
             return View(price);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ServiceId,Name,ServicePrice")] Price price)
+        public async Task<IActionResult> Edit(int id, [Bind("ServiceId,Name,Model,ServicePrice")] Price price)
         {
             if (id != price.ServiceId)
+            {
                 return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
@@ -78,42 +74,43 @@ namespace PanamaPrintApp.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!PriceExists(price.ServiceId))
+                    {
                         return NotFound();
+                    }
                     else
+                    {
                         throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(price);
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
+            {
                 return NotFound();
+            }
 
             var price = await _context.Prices
                 .FirstOrDefaultAsync(m => m.ServiceId == id);
-
             if (price == null)
+            {
                 return NotFound();
+            }
 
             return View(price);
         }
 
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Администратор")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var price = await _context.Prices.FindAsync(id);
-
             _context.Prices.Remove(price);
-
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
 
