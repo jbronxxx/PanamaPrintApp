@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PanamaPrintApp.Models.Price>
+﻿@model IEnumerable<Price>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +6,19 @@
 
 @if (User.IsInRole("Администратор"))
 {
-    <p align="right">
-        <a asp-action="Create" class="btn btn-dark">Добавить позицию</a>
-    </p>
+    <div align="right">
+        <p>
+            <a asp-action="Create" class="btn btn-dark">Добавить позицию</a>
+        </p>
+    </div>
+
+    <div align="right">
+        <form asp-action="ExcelImport" asp-controller="Price" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" /><br />
+
+            <input type="submit" value="Загрузить"/>
+        </form>
+    </div>
 }
 
 <table class="table">
@@ -16,9 +26,6 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ServicePrice)
@@ -32,9 +39,6 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Model)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ServicePrice)

@@ -1,6 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PanamaPrintApp.Models;
@@ -11,20 +16,22 @@ namespace PanamaPrintApp.Controllers
     public class PriceController : Controller
     {
         private readonly CompanyContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public PriceController(CompanyContext context)
+        public PriceController(CompanyContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Prices.ToListAsync());
+            return base.View(await _context.Prices.ToListAsync());
         }
 
         public IActionResult Create()
         {
-            return View();
+            return base.View();
         }
 
         [HttpPost]
@@ -117,6 +124,60 @@ namespace PanamaPrintApp.Controllers
         private bool PriceExists(int id)
         {
             return _context.Prices.Any(e => e.ServiceId == id);
+        }
+
+        [HttpGet]
+        public IActionResult View(List<Price> prices = null)
+        {
+            prices ??= new List<Price>();
+
+            return View(prices);
+        }
+
+        [HttpPost]
+        public IActionResult ExcelImport(IFormFile file)
+        {
+            if (ModelState.IsValid)
+            {
+                string filePath = Path.GetTempFileName();
+
+                using (FileStream stream = System.IO.File.Create(filePath))
+                {
+                    file.CopyTo(stream);
+
+                    //stream.Flush();
+                }
+            }
+            
+            var prices = GetPriceList(file.FileName);
+
+            return View(prices);
+        }
+
+        private List<Price> GetPriceList(string fName)
+        {
+            List<Price> prices = new List<Price>();
+
+            //var fileName = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\files"}" + "\\" + fName;
+
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+            using (var stream = System.IO.File.Open(fName, FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    while (reader.Read())
+                    {
+                        prices.Add(new Price()
+                        {
+                            Name = reader.GetValue(1).ToString(),
+                            ServicePrice = reader.GetValue(2).ToString()
+                        });
+                    }
+                }
+            }
+
+            return prices;
         }
     }
 }
