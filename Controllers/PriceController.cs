@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Office.Interop.Excel;
 using PanamaPrintApp.Models;
 
 namespace PanamaPrintApp.Controllers
@@ -137,47 +139,20 @@ namespace PanamaPrintApp.Controllers
         [HttpPost]
         public IActionResult ExcelImport(IFormFile file)
         {
-            if (ModelState.IsValid)
-            {
-                string filePath = Path.GetTempFileName();
-
-                using (FileStream stream = System.IO.File.Create(filePath))
-                {
-                    file.CopyTo(stream);
-
-                    //stream.Flush();
-                }
-            }
-            
-            var prices = GetPriceList(file.FileName);
-
-            return View(prices);
-        }
-
-        private List<Price> GetPriceList(string fName)
-        {
             List<Price> prices = new List<Price>();
 
-            //var fileName = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\files"}" + "\\" + fName;
+            Application application = new Application();
 
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            Workbook workbook = application.Workbooks.Open(file.FileName);
 
-            using (var stream = System.IO.File.Open(fName, FileMode.Open, FileAccess.Read))
+            prices.Add(new Price
             {
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
-                {
-                    while (reader.Read())
-                    {
-                        prices.Add(new Price()
-                        {
-                            Name = reader.GetValue(1).ToString(),
-                            ServicePrice = reader.GetValue(2).ToString()
-                        });
-                    }
-                }
-            }
+                Name = workbook.Name
+            }); 
 
-            return prices;
+            workbook.Close(false, file, null);
+
+            return View(prices);
         }
     }
 }
