@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="App_Data\**" />
+    <Compile Remove="wwwroot\files\**" />
+    <Content Remove="App_Data\**" />
+    <Content Remove="wwwroot\files\**" />
+    <EmbeddedResource Remove="App_Data\**" />
+    <EmbeddedResource Remove="wwwroot\files\**" />
+    <None Remove="App_Data\**" />
+    <None Remove="wwwroot\files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.7" />
@@ -23,11 +34,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="wwwroot\files\" />
   </ItemGroup>
 
 </Project>

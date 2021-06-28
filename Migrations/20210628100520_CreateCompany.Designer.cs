@@ -10,8 +10,8 @@ using PanamaPrintApp.Models;
 namespace PanamaPrintApp.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20210624044635_InitialPriceField")]
-    partial class InitialPriceField
+    [Migration("20210628100520_CreateCompany")]
+    partial class CreateCompany
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -91,9 +91,6 @@ namespace PanamaPrintApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Model")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PanamaPrintApp.Migrations.User
 {
-    public partial class InitialCreateUser : Migration
+    public partial class initialUserCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

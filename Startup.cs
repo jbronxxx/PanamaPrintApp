@@ -29,7 +29,7 @@ namespace PanamaPrintApp
 
             services.AddDbContext<CompanyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PriceConnection")));
 
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UserConnection")));
+            services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("UsersConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<UserContext>();
         }
