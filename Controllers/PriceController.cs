@@ -143,6 +143,7 @@ namespace PanamaPrintApp.Controllers
             // Записываает данные в базу
             foreach (var context in prices)
             {
+                // Проверка на существование записей в БД
                 if (_context.Prices.Any(n => n.Name == context.Name))
                 {
                     RedirectToAction("Index");
