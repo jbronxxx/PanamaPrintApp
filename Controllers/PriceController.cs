@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Office.Interop.Excel;
 using PanamaPrintApp.Models;
+using PanamaPrintApp.Models.ModelPrice;
+using PanamaPrintApp.Service;
 
 namespace PanamaPrintApp.Controllers
 {
@@ -18,12 +15,12 @@ namespace PanamaPrintApp.Controllers
     public class PriceController : Controller
     {
         private readonly CompanyContext _context;
-        private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IExcelService _excelService;
 
-        public PriceController(CompanyContext context, IWebHostEnvironment hostEnvironment)
+        public PriceController(CompanyContext context, IExcelService excelService)
         {
             _context = context;
-            _hostEnvironment = hostEnvironment;
+            _excelService = excelService;
         }
 
         public async Task<IActionResult> Index()
@@ -57,6 +54,7 @@ namespace PanamaPrintApp.Controllers
             }
 
             var price = await _context.Prices.FindAsync(id);
+
             if (price == null)
             {
                 return NotFound();
@@ -128,31 +126,34 @@ namespace PanamaPrintApp.Controllers
             return _context.Prices.Any(e => e.ServiceId == id);
         }
 
-        [HttpGet]
-        public IActionResult View(List<Price> prices = null)
+        // Отображает выбранный файл Excel и добавляет данные в БД
+        public IActionResult ExcelView(IFormFile file)
         {
-            prices ??= new List<Price>();
+            // Возвращает массив данных из Excel файла
+            var result = _excelService.ExcelImport(file);
 
-            return View(prices);
-        }
-
-        [HttpPost]
-        public IActionResult ExcelImport(IFormFile file)
-        {
-            List<Price> prices = new List<Price>();
-
-            Application application = new Application();
-
-            Workbook workbook = application.Workbooks.Open(file.FileName);
-
-            prices.Add(new Price
+            // Копирует массив данных из Excel в экземпляр класса Price
+            var prices = result.Select(x => new Price()
             {
-                Name = workbook.Name
-            }); 
+                ServiceId = x.ServiceId,
+                Name = x.Name,
+                ServicePrice = x.ServicePrice
+            });
 
-            workbook.Close(false, file, null);
-
-            return View(prices);
+            // Записываает данные в базу
+            foreach (var context in prices)
+            {
+                if (_context.Prices.Any(n => n.Name == context.Name))
+                {
+                    RedirectToAction("Index");
+                }
+                else
+                {
+                    _context.Add(context);
+                    _context.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index");
         }
     }
 }

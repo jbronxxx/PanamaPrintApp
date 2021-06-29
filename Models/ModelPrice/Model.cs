@@ -1,18 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PanamaPrintApp.Models.ModelPrice
 {
     public class Model
     {
+        [Key]
+        public int ID { get; set; }
         // Наименование техники
         public string ModelName { get; set; }
 
         // Список услуг для данной техники
-        public List<Price> prices { get; set; }
+        public List<Price> Prices { get; set; }
 
         public Model()
         {
-            prices = new List<Price>();
+            Prices = new List<Price>();
         }
     }
 }
