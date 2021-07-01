@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PanamaPrintApp.Models.ModelPrice;
 
 namespace PanamaPrintApp.Models
 {
@@ -14,5 +13,7 @@ namespace PanamaPrintApp.Models
         public DbSet<Price> Prices { get; set; }
 
         public DbSet<Model> Models { get; set; }
+ 
+        public DbSet<ModelList> ModelList { get; set; }
     }
 }

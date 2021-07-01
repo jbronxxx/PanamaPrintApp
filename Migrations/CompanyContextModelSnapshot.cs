@@ -57,19 +57,39 @@ namespace PanamaPrintApp.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("PanamaPrintApp.Models.ModelPrice.Model", b =>
+            modelBuilder.Entity("PanamaPrintApp.Models.Model", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("ModelListID")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModelName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
+                    b.HasIndex("ModelListID");
+
                     b.ToTable("Models");
+                });
+
+            modelBuilder.Entity("PanamaPrintApp.Models.ModelList", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ModelListName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ModelList");
                 });
 
             modelBuilder.Entity("PanamaPrintApp.Models.Order", b =>
@@ -108,7 +128,7 @@ namespace PanamaPrintApp.Migrations
                     b.Property<int?>("ModelID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("PriceName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -137,16 +157,28 @@ namespace PanamaPrintApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PanamaPrintApp.Models.Model", b =>
+                {
+                    b.HasOne("PanamaPrintApp.Models.ModelList", null)
+                        .WithMany("Models")
+                        .HasForeignKey("ModelListID");
+                });
+
             modelBuilder.Entity("PanamaPrintApp.Models.Price", b =>
                 {
-                    b.HasOne("PanamaPrintApp.Models.ModelPrice.Model", null)
-                        .WithMany("prices")
+                    b.HasOne("PanamaPrintApp.Models.Model", null)
+                        .WithMany("Prices")
                         .HasForeignKey("ModelID");
                 });
 
-            modelBuilder.Entity("PanamaPrintApp.Models.ModelPrice.Model", b =>
+            modelBuilder.Entity("PanamaPrintApp.Models.Model", b =>
                 {
-                    b.Navigation("prices");
+                    b.Navigation("Prices");
+                });
+
+            modelBuilder.Entity("PanamaPrintApp.Models.ModelList", b =>
+                {
+                    b.Navigation("Models");
                 });
 #pragma warning restore 612, 618
         }

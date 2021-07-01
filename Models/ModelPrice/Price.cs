@@ -10,9 +10,9 @@ namespace PanamaPrintApp.Models
 
         [Required(ErrorMessage = "Обязательно для заполнения")]
         [DisplayName("Наименование")]
-        public string Name { get; set; } = "";
-
+        public string PriceName { get; set; }
+ 
         [DisplayName("Цена")]
-        public string ServicePrice { get; set; } = "";
+        public string ServicePrice { get; set; }
     }
 }

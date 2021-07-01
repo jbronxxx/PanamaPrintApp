@@ -132,7 +132,7 @@ namespace PanamaPrintApp.Controllers
             var prices = result.Select(x => new Price()
             {
                 ServiceId = x.ServiceId,
-                Name = x.Name,
+                PriceName = x.PriceName,
                 ServicePrice = x.ServicePrice
             });
 
@@ -140,7 +140,7 @@ namespace PanamaPrintApp.Controllers
             foreach (var context in prices)
             {
                 // Проверка на существование записей в БД
-                if (_context.Prices.Any(n => n.Name == context.Name))
+                if (_context.Prices.Any(n => n.PriceName == context.PriceName))
                 {
                     RedirectToAction("Index");
                 }

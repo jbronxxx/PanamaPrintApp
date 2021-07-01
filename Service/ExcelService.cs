@@ -43,7 +43,7 @@ namespace PanamaPrintApp.Service
                         // Создает список с прайслистом из файла Excel
                         prices.Add(new Price
                         {
-                            Name = reader.GetValue(0).ToString(),
+                            PriceName = reader.GetValue(0).ToString(),
                             ServicePrice = reader.GetValue(1).ToString()
                         });
                     }

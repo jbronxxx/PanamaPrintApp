@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PanamaPrintApp.Migrations
 {
-    public partial class CreateCompany : Migration
+    public partial class InitialCreateCompany : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,6 +23,19 @@ namespace PanamaPrintApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ModelList",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ModelListName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ModelList", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -39,17 +52,23 @@ namespace PanamaPrintApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prices",
+                name: "Models",
                 columns: table => new
                 {
-                    ServiceId = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ServicePrice = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ModelName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModelListID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prices", x => x.ServiceId);
+                    table.PrimaryKey("PK_Models", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Models_ModelList_ModelListID",
+                        column: x => x.ModelListID,
+                        principalTable: "ModelList",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,10 +95,41 @@ namespace PanamaPrintApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Prices",
+                columns: table => new
+                {
+                    ServiceId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PriceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ServicePrice = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ModelID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prices", x => x.ServiceId);
+                    table.ForeignKey(
+                        name: "FK_Prices_Models_ModelID",
+                        column: x => x.ModelID,
+                        principalTable: "Models",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CompanyOrder_OrdersOrderId",
                 table: "CompanyOrder",
                 column: "OrdersOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Models_ModelListID",
+                table: "Models",
+                column: "ModelListID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Prices_ModelID",
+                table: "Prices",
+                column: "ModelID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -95,6 +145,12 @@ namespace PanamaPrintApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Models");
+
+            migrationBuilder.DropTable(
+                name: "ModelList");
         }
     }
 }

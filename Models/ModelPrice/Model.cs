@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace PanamaPrintApp.Models.ModelPrice
+namespace PanamaPrintApp.Models
 {
     public class Model
     {
         [Key]
         public int ID { get; set; }
+
         // Наименование техники
         public string ModelName { get; set; }
 
