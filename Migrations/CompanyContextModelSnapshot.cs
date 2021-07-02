@@ -125,7 +125,7 @@ namespace PanamaPrintApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ModelID")
+                    b.Property<int>("ModelID")
                         .HasColumnType("int");
 
                     b.Property<string>("PriceName")
@@ -166,9 +166,13 @@ namespace PanamaPrintApp.Migrations
 
             modelBuilder.Entity("PanamaPrintApp.Models.Price", b =>
                 {
-                    b.HasOne("PanamaPrintApp.Models.Model", null)
+                    b.HasOne("PanamaPrintApp.Models.Model", "Model")
                         .WithMany("Prices")
-                        .HasForeignKey("ModelID");
+                        .HasForeignKey("ModelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("PanamaPrintApp.Models.Model", b =>

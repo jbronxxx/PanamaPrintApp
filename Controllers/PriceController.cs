@@ -122,37 +122,36 @@ namespace PanamaPrintApp.Controllers
             return _context.Prices.Any(e => e.ServiceId == id);
         }
 
+        [HttpGet]
+        public IActionResult ExcelView()
+        {
+            return View(_context.ModelList.ToList());
+        }
+
         // Отображает выбранный файл Excel и добавляет данные в БД
+        [HttpPost]
         public IActionResult ExcelView(IFormFile file)
         {
             // Возвращает массив данных из Excel файла
-             _excelService.FileCreate(file);
+             string path = _excelService.FileCreate(file);
 
-            var result = _excelService.ExcelReader(file.FileName);
+            ModelList result = _excelService.ExcelReader(path);
 
-            // Копирует массив данных из Excel в экземпляр класса Price
-            var prices = result.Select(x => new Price()
-            {
+            _context.Add(result);
 
-            });
+            _context.SaveChanges();
 
-            // Записываает данные в базу
-            foreach (var context in prices)
-            {
-                // Проверка на существование записей в БД
-                if (_context.Prices.Any(n => n.PriceName == context.PriceName))
-                {
-                    RedirectToAction("Index");
-                }
-                else
-                {
-                    _context.Add(context);
+            //// Проверка на существование записей в БД
+            //if (_context.ModelList.Any(x => x.ModelListName == result.ModelListName))
+            //{
+            //    RedirectToAction("Index");
+            //}
+            //else
+            //{
 
-                    _context.SaveChanges();
-                }
-            }
+            //}
 
-            return RedirectToAction("Index");
+            return View(result);
         }
     }
 }

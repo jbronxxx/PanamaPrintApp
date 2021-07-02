@@ -16,7 +16,10 @@ namespace PanamaPrintApp.Service
             _hostEnvironment = hostEnvironment;
         }
 
-        public void FileCreate(IFormFile file)
+        /* TODO: 
+         * сделать проверку на наличия уже созданного файла в папке с проектом
+         */
+        public string FileCreate(IFormFile file)
         {
             // Путь к папке wwwroot в папке с проектом
             string filePath = $"{_hostEnvironment.WebRootPath}\\{file.FileName}";
@@ -29,6 +32,8 @@ namespace PanamaPrintApp.Service
                 // Закрывает открытый поток
                 stream.Flush();
             }
+
+            return filePath;
         }
 
         public ModelList ExcelReader(string path)
@@ -37,7 +42,7 @@ namespace PanamaPrintApp.Service
             ModelList modelList = new ModelList();
 
             // Открывет Excel документ
-            using(XLWorkbook workbook = new XLWorkbook(path, XLEventTracking.Disabled))
+            using (XLWorkbook workbook = new XLWorkbook(path, XLEventTracking.Disabled))
             {
                 // Проходит по листам Excel документа
                 foreach (IXLWorksheet worksheet in workbook.Worksheets)
@@ -69,9 +74,8 @@ namespace PanamaPrintApp.Service
                         modelList.Models.Add(model);
                     }
                 }
+                return modelList;
             }
-
-            return modelList;
         }
     }
 }

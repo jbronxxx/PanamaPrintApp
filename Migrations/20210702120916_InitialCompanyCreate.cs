@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PanamaPrintApp.Migrations
 {
-    public partial class InitialCreateCompany : Migration
+    public partial class InitialCompanyCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -103,7 +103,7 @@ namespace PanamaPrintApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PriceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ServicePrice = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModelID = table.Column<int>(type: "int", nullable: true)
+                    ModelID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -113,7 +113,7 @@ namespace PanamaPrintApp.Migrations
                         column: x => x.ModelID,
                         principalTable: "Models",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

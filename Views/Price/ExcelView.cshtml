@@ -1,0 +1,39 @@
+﻿@model ModelList
+
+@{ 
+    ViewData["Title"] = "Import";
+}
+
+
+
+<div>
+    <div>
+        @foreach (Model modelList in Model.Models)
+        {
+            <h3>
+                Модель: @modelList.ModelName
+            </h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Неисправность</th>
+                        @foreach (Price price in modelList.Prices)
+                        {
+                            <th>@price.PriceName</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Цена</th>
+                        @foreach (Price servicePrice in modelList.Prices)
+                        {
+                            <td>@servicePrice.ServicePrice</td>
+                        }
+                    </tr>
+                    
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

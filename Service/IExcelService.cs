@@ -5,8 +5,8 @@ namespace PanamaPrintApp.Service
 {
     public interface IExcelService
     {
-        void FileCreate(IFormFile file);
+        string FileCreate(IFormFile file);
 
-        ModelList ExcelReader(string path) { return new ModelList; }
+        ModelList ExcelReader(string path) { return new ModelList(); }
     }
 }

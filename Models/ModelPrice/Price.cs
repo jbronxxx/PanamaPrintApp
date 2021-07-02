@@ -14,5 +14,8 @@ namespace PanamaPrintApp.Models
  
         [DisplayName("Цена")]
         public string ServicePrice { get; set; }
+
+        public int ModelID { get; set; }
+        public Model Model { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using PanamaPrintApp.Models;
 namespace PanamaPrintApp.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20210701103824_InitialCreateCompany")]
-    partial class InitialCreateCompany
+    [Migration("20210702120916_InitialCompanyCreate")]
+    partial class InitialCompanyCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,7 +127,7 @@ namespace PanamaPrintApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ModelID")
+                    b.Property<int>("ModelID")
                         .HasColumnType("int");
 
                     b.Property<string>("PriceName")
@@ -168,9 +168,13 @@ namespace PanamaPrintApp.Migrations
 
             modelBuilder.Entity("PanamaPrintApp.Models.Price", b =>
                 {
-                    b.HasOne("PanamaPrintApp.Models.Model", null)
+                    b.HasOne("PanamaPrintApp.Models.Model", "Model")
                         .WithMany("Prices")
-                        .HasForeignKey("ModelID");
+                        .HasForeignKey("ModelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("PanamaPrintApp.Models.Model", b =>
