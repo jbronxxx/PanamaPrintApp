@@ -126,14 +126,14 @@ namespace PanamaPrintApp.Controllers
         public IActionResult ExcelView(IFormFile file)
         {
             // Возвращает массив данных из Excel файла
-            var result = _excelService.ExcelImport(file);
+             _excelService.FileCreate(file);
+
+            var result = _excelService.ExcelReader(file.FileName);
 
             // Копирует массив данных из Excel в экземпляр класса Price
             var prices = result.Select(x => new Price()
             {
-                ServiceId = x.ServiceId,
-                PriceName = x.PriceName,
-                ServicePrice = x.ServicePrice
+
             });
 
             // Записываает данные в базу

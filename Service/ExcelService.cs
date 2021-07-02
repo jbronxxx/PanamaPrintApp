@@ -1,9 +1,9 @@
-﻿using ExcelDataReader;
+﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using PanamaPrintApp.Models;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace PanamaPrintApp.Service
 {
@@ -16,11 +16,8 @@ namespace PanamaPrintApp.Service
             _hostEnvironment = hostEnvironment;
         }
 
-        // Импортирует файл Excel 
-        public List<Price> ExcelImport(IFormFile file)
+        public void FileCreate(IFormFile file)
         {
-            List<Price> prices = new List<Price>();
-
             // Путь к папке wwwroot в папке с проектом
             string filePath = $"{_hostEnvironment.WebRootPath}\\{file.FileName}";
 
@@ -32,25 +29,49 @@ namespace PanamaPrintApp.Service
                 // Закрывает открытый поток
                 stream.Flush();
             }
+        }
 
-            using (var excelOpen = File.Open(filePath, FileMode.Open, FileAccess.Read))
+        public ModelList ExcelReader(string path)
+        {
+            // Список моделей техники
+            ModelList modelList = new ModelList();
+
+            // Открывет Excel документ
+            using(XLWorkbook workbook = new XLWorkbook(path, XLEventTracking.Disabled))
             {
-                using (var reader = ExcelReaderFactory.CreateReader(excelOpen))
+                // Проходит по листам Excel документа
+                foreach (IXLWorksheet worksheet in workbook.Worksheets)
                 {
-                    // Читает файл Excel 
-                    while (reader.Read())
+                    // Проходит по колонкам активного листа Excel документа
+                    foreach (IXLColumn column in worksheet.ColumnsUsed().Skip(1))
                     {
-                        // Создает список с прайслистом из файла Excel
-                        prices.Add(new Price
+                        Model model = new Model();
+
+                        // Записывает в список моделей значения первых ячеек колонок в качестве названия техники,
+                        // пропуская первую колонку
+                        model.ModelName = column.Cell(1).Value.ToString();
+
+                        foreach (IXLRow row in worksheet.RowsUsed().Skip(1))
                         {
-                            PriceName = reader.GetValue(0).ToString(),
-                            ServicePrice = reader.GetValue(1).ToString()
-                        });
+                            Price price = new Price();
+
+                            // Записывает значения первых ячеек первой колонки в качестве наименования услуги
+                            price.PriceName = row.Cell(1).Value.ToString();
+
+                            // Значения остальных ячеек в качестве цены на услуги
+                            price.ServicePrice = row.Cell(column.ColumnNumber()).Value.ToString();
+
+                            // Запись в список прайса на каждую модель
+                            model.Prices.Add(price);
+                        }
+
+                        // Запись в список моделей
+                        modelList.Models.Add(model);
                     }
                 }
             }
-            // Возвращает созданный список с прайсом
-            return prices;
+
+            return modelList;
         }
     }
 }
