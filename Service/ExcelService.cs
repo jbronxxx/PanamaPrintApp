@@ -21,18 +21,26 @@ namespace PanamaPrintApp.Service
          */
         public string FileCreate(IFormFile file)
         {
+            FileInfo fileInfo = new FileInfo(file.FileName);
+
             // Путь к папке wwwroot в папке с проектом
             string filePath = $"{_hostEnvironment.WebRootPath}\\{file.FileName}";
 
-            using (FileStream stream = File.Create(filePath))
+            if (!fileInfo.Exists)
             {
-                // Копирует файл Excel в папку wwwroot
-                file.CopyTo(stream);
-
-                // Закрывает открытый поток
-                stream.Flush();
+                throw new FileNotFoundException("Файл не найден", file.FileName);
             }
+            else
+            {
+                using (FileStream stream = File.Create(filePath))
+                {
+                    // Копирует файл Excel в папку wwwroot
+                    file.CopyTo(stream);
 
+                    // Закрывает открытый поток
+                    stream.Flush();
+                }
+            }
             return filePath;
         }
 
